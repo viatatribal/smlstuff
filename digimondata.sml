@@ -1,4 +1,3 @@
-use "table.sml";
 (* datatype for the level of digimons *)
 datatype digilevel = Fresh of string list
                    | Training of string list
@@ -39,6 +38,44 @@ val champion = Champion(["1.Birdramon", "2.Meramon", "3.Greymon", "4.Tyrannomon"
 val ultimate = Ultimate(["1.Phoenixmon", "2.Megadramon", "3.Skullgreymon", "4.MetalGreymon",
                          "5.Andromon", "6.MetalMamemon", "7.Giromon", "8.MegaSeadramon", "9.Mamemon",
                          "10.HKabuterimon", "11.Piximon", "12.Monzaemon", "14.Etemon", "15.Digitamamon"]);
+
+
+structure ht = HashTable;
+fun reqFromList ls =
+    let
+      val size = length ls
+      val tb : (string, digimon) ht.hash_table =
+          ht.mkTable
+              (HashString.hashString, op=) (size, Empty)
+      fun rfl [] = ()
+       |  rfl ((x,y)::xs) =
+          ( ht.insert tb (x, y)
+          ; rfl xs)
+    in
+      let
+        val _ = rfl ls
+      in
+        tb
+      end
+    end;
+
+fun evoFromList ls =
+    let
+      val size = length ls
+      val tb : (string, string list) ht.hash_table =
+          ht.mkTable
+              (HashString.hashString, op=) (size, Empty)
+      fun rfl [] = ()
+       |  rfl ((x,y)::xs) =
+          ( ht.insert tb (x, y)
+          ; rfl xs)
+    in
+      let
+        val _ = rfl ls
+      in
+        tb
+      end
+    end;
 
 
 (* table of requirements *)
@@ -238,7 +275,7 @@ val reqtable =
                   ,("Mamemon",Mamemon), ("Digitamamon",Digitamamon), ("Monzaemon",Monzaemon), ("Etemon",Etemon)
                   ,("Vademon",Vademon), ("Sukamon",Sukamon)]
   in
-    Table.fromList reqlist
+    reqFromList reqlist
   end;
 
 (* table of evolution *)
@@ -330,5 +367,5 @@ val evotable =
                   ,("Mamemon",mamemon), ("Digitamamon",digitamamon), ("Monzaemon",monzaemon), ("Etemon",etemon)
                   ,("Vademon",vademon), ("Sukamon",sukamon)]
   in
-    Table.fromList evolist
+    evoFromList evolist
   end;
