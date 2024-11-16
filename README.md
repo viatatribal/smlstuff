@@ -18,3 +18,6 @@ A simple prime generator function
 
 spellchecker:
 A extremly slow spellchecker, created only to learn the edit distance algorithm
+
+6502asm:
+A 6502 assembler that can also output the listing file including machine code and assembler code.
